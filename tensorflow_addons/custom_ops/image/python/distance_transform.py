@@ -17,25 +17,23 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import dis
-
 import tensorflow as tf
 from tensorflow.python.framework import common_shapes
 from tensorflow.python.framework import dtypes
 from tensorflow.python.framework import load_library
 from tensorflow.python.framework import ops
-from tensorflow.python.ops import array_ops
 from tensorflow.python.ops import math_ops
 from tensorflow.python.platform import resource_loader
-
 
 _image_ops_so = load_library.load_op_library(
     resource_loader.get_path_to_datafile("_image_ops.so"))
 
 ops.NotDifferentiable("EuclideanDistanceTransform")
-ops.RegisterShape("EuclideanDistanceTransform")(common_shapes.call_cpp_shape_fn)
+ops.RegisterShape("EuclideanDistanceTransform")(
+    common_shapes.call_cpp_shape_fn)
 
 _OUTPUT_DTYPES = [tf.float16, tf.float32, tf.float64]
+
 
 @tf.function
 def euclidean_dist_transform(images, dtype=tf.float32, name=None):
@@ -43,7 +41,7 @@ def euclidean_dist_transform(images, dtype=tf.float32, name=None):
     Applies euclidean distance transform to the images_t
 
     Args:
-      images: A tensor of shape (num_images, num_rows, num_columns, num_channels)
+      images: Tensor of shape (num_images, num_rows, num_columns, num_channels)
         (NHWC) or (num_rows, num_columns, num_channels) (HWC). The rank must be
         statically knownself. The image must be a binary image of uint8 type.
       dtype: The dtype of the output, must be float16, float32 or float64
@@ -63,8 +61,8 @@ def euclidean_dist_transform(images, dtype=tf.float32, name=None):
         image_or_images = ops.convert_to_tensor(images, name="images")
 
         if image_or_images.dtype.base_dtype != dtypes.uint8:
-            raise TypeError("Invalid dtype %s. Excepted uint8."
-            % image_or_images.dtype)
+            raise TypeError(
+                "Invalid dtype %s. Excepted uint8." % image_or_images.dtype)
         elif image_or_images.get_shape().ndims is None:
             raise TypeError("`images` rank must be statically known")
         elif len(image_or_images.get_shape()) == 3:
@@ -85,5 +83,4 @@ def euclidean_dist_transform(images, dtype=tf.float32, name=None):
 
         if len(image_or_images.get_shape()) == 3:
             return output[0, :, :, :]
-        else:
-            return output
+        return output

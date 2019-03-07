@@ -25,8 +25,8 @@ limitations under the License.
 
 #include <limits>
 
-#define IDX(x, y) Eigen::array<Eigen::DenseIndex, 4> \
-                  ({coords[0], x, y, coords[3]})
+#define IDX(x, y)                                                              \
+  Eigen::array<Eigen::DenseIndex, 4>({coords[0], x, y, coords[3]})
 
 namespace tensorflow {
 
@@ -37,11 +37,11 @@ using Eigen::DenseIndex;
 
 template <typename Device, typename T>
 class EuclideanDistanceTransformGenerator {
- private:
+private:
   typename TTypes<T, 4>::ConstTensor input_;
   int64 height, width, maxElem;
 
- public:
+public:
   EIGEN_DEVICE_FUNC EIGEN_ALWAYS_INLINE
   EuclideanDistanceTransformGenerator(typename TTypes<T, 4>::ConstTensor input)
       : input_(input) {
@@ -51,7 +51,7 @@ class EuclideanDistanceTransformGenerator {
   }
 
   EIGEN_DEVICE_FUNC EIGEN_ALWAYS_INLINE T
-  operator()(const array<DenseIndex, 4>&coords) const {
+  operator()(const array<DenseIndex, 4> &coords) const {
     const int64 x = coords[1];
     const int64 y = coords[2];
 
@@ -86,8 +86,8 @@ struct EuclideanDistanceTransformFunctor {
   EuclideanDistanceTransformFunctor() {}
 
   EIGEN_ALWAYS_INLINE
-  void operator()(const Device& device, OutputType* output,
-                  const InputType& images) const {
+  void operator()(const Device &device, OutputType *output,
+                  const InputType &images) const {
     output->device(device) = output->generate(
         EuclideanDistanceTransformGenerator<Device, T>(images));
   }
