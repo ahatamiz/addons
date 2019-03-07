@@ -5,6 +5,8 @@ package(default_visibility = ["//visibility:public"])
 cc_binary(
     name = "python/_image_ops.so",
     srcs = [
+        "cc/kernels/euclidean_distance_transform_op.cc",
+        "cc/kernels/euclidean_distance_transform_op.h",
         "cc/kernels/image_projective_transform_op.cc",
         "cc/kernels/image_projective_transform_op.h",
         "cc/ops/image_ops.cc",
@@ -27,6 +29,7 @@ py_library(
         "__init__.py",
         "python/__init__.py",
         "python/transform.py",
+        "python/distance_transform.py",
     ]),
     data = [
         ":python/_image_ops.so",

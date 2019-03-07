@@ -19,3 +19,4 @@ from __future__ import print_function
 
 # Transforms
 from tensorflow_addons.custom_ops.image.python.transform import transform
+from tensorflow_addons.custom_ops.image.python.distance_transform import euclidean_dist_transform
