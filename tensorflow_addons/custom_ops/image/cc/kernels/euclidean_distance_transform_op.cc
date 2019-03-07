@@ -31,9 +31,6 @@ namespace functor {
 
 typedef Eigen::ThreadPoolDevice CPUDevice;
 
-template struct EuclideanDistanceTransformFunctor<CPUDevice, uint8>;
-template struct EuclideanDistanceTransformFunctor<CPUDevice, int32>;
-template struct EuclideanDistanceTransformFunctor<CPUDevice, int64>;
 template struct EuclideanDistanceTransformFunctor<CPUDevice, Eigen::half>;
 template struct EuclideanDistanceTransformFunctor<CPUDevice, float>;
 template struct EuclideanDistanceTransformFunctor<CPUDevice, double>;
