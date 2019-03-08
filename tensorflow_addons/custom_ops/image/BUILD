@@ -39,6 +39,19 @@ py_library(
 
 # TODO: use cuda_py_test later.
 py_test(
+    name = "distance_transform_ops_test",
+    size = "small",
+    srcs = [
+        "python/distance_transform_test.py",
+    ],
+    main = "python/distance_transform_test.py",
+    srcs_version = "PY2AND3",
+    deps = [
+        ":images_ops_py",
+    ]
+)
+
+py_test(
     name = "transform_ops_test",
     size = "small",
     srcs = [
