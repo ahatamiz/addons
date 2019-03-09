@@ -17,7 +17,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import tensorflow as tf
+from tensorflow.python.eager import def_function
 from tensorflow.python.framework import common_shapes
 from tensorflow.python.framework import dtypes
 from tensorflow.python.framework import load_library
@@ -32,11 +32,11 @@ ops.NotDifferentiable("EuclideanDistanceTransform")
 ops.RegisterShape("EuclideanDistanceTransform")(
     common_shapes.call_cpp_shape_fn)
 
-_OUTPUT_DTYPES = [tf.float16, tf.float32, tf.float64]
+_OUTPUT_DTYPES = [dtypes.float16, dtypes.float32, dtypes.float64]
 
 
-@tf.function
-def euclidean_dist_transform(images, dtype=tf.float32, name=None):
+@def_function.function
+def euclidean_dist_transform(images, dtype=dtypes.float32, name=None):
     """
     Applies euclidean distance transform to the images_t
 

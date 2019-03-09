@@ -18,15 +18,11 @@ limitations under the License.
 
 #define EIGEN_USE_THREADS
 
-#include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
+#include <limits>
 
 #include "tensorflow/core/framework/tensor_types.h"
 #include "tensorflow/core/platform/types.h"
-
-#include <limits>
-
-#define IDX(x, y)                                                              \
-  Eigen::array<Eigen::DenseIndex, 4>({coords[0], x, y, coords[3]})
+#include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
 
 namespace tensorflow {
 
@@ -39,15 +35,14 @@ template <typename Device, typename T>
 class EuclideanDistanceTransformGenerator {
 private:
   typename TTypes<T, 4>::ConstTensor input_;
-  int64 height, width, maxElem;
+  int64 height_, width_;
 
 public:
   EIGEN_DEVICE_FUNC EIGEN_ALWAYS_INLINE
   EuclideanDistanceTransformGenerator(typename TTypes<T, 4>::ConstTensor input)
       : input_(input) {
-    height = input_.dimensions()[1];
-    width = input_.dimensions()[2];
-    maxElem = std::max(height, width);
+    height_ = input_.dimensions()[1];
+    width_ = input_.dimensions()[2];
   }
 
   EIGEN_DEVICE_FUNC EIGEN_ALWAYS_INLINE T
@@ -60,9 +55,9 @@ public:
 
     float minDistance = std::numeric_limits<T>::max();
 
-    for (int k = 0; k < height; ++k) {
-      for (int h = 0; h < width; ++h) {
-        if (input_(IDX(k, h)) == T(0)) {
+    for (int k = 0; k < height_; ++k) {
+      for (int h = 0; h < width_; ++h) {
+        if (input_({coords[0], k, h, coords[3]}) == T(0)) {
           float dist = std::sqrt((x - k) * (x - k) + (h - y) * (h - y));
           minDistance = std::min(minDistance, dist);
         }
